@@ -8,6 +8,8 @@ import '../../constant.dart';
 import '../../widgets/appbar_widget.dart';
 import 'package:http/http.dart' as http;
 
+import '../forgetPassword.dart';
+
 class EditPasswordFormPage extends StatefulWidget {
   const EditPasswordFormPage({Key? key, required this.reg}) : super(key: key);
   final Registration reg;
@@ -168,10 +170,10 @@ class EditPasswordFormPageState extends State<EditPasswordFormPage> {
                                   fontFamily: "roboto",
                                   fontWeight: FontWeight.bold)),
                           onTap: () {
-                            // Navigator.of(context).pushReplacement(
-                            //     MaterialPageRoute(
-                            //         builder: (BuildContext context) =>
-                            //             const ForgotPasswordPage));
+                            Navigator.of(context).pushReplacement(
+                                MaterialPageRoute(
+                                    builder: (BuildContext context) =>
+                                        const ForgotPasswordPage()));
                           },
                         ),
                       ),

@@ -46,6 +46,8 @@ dependencies:
   image_cropper: ^1.4.1
   flutter_radar_chart: ^0.2.1
   google_fonts: ^2.1.0 
+  flutter_email_sender: ^5.2.0
+  sliding_card: ^0.1.2
 
 dev_dependencies:
   flutter_test:

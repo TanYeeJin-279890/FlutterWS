@@ -5,6 +5,7 @@ import 'package:dys_evaluation_app/fix.dart';
 import 'package:dys_evaluation_app/models/reg.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'editname.dart';
 import 'editpassword.dart';
 import 'editphone.dart';
@@ -39,11 +40,19 @@ class _ProfilePageState extends State<ProfilePage> {
     Navigator.push(context, route).then(onGoBack);
   }
 
+  var text = GoogleFonts.openSansCondensed(
+      color: Colors.blueAccent, // Set the label text color
+      fontSize: 20.0, // Set the label text font size
+      fontWeight: FontWeight
+          .w600, // Set the label text font weight // Set the label text font style
+      letterSpacing: 1);
+
   @override
   Widget build(BuildContext context) {
     _nameController.text = widget.reg.name.toString();
     _phoneController.text = widget.reg.phone.toString();
     _emailController.text = widget.reg.email.toString();
+
     return Scaffold(
       backgroundColor: neutral,
       body: Column(
@@ -73,17 +82,14 @@ class _ProfilePageState extends State<ProfilePage> {
               ],
             ),
           ),
-          const Center(
+          Center(
               child: Padding(
-                  padding: EdgeInsets.only(top: 20, bottom: 10),
-                  child: Text(
-                    'My Profile',
-                    style: TextStyle(
-                        color: background,
-                        fontSize: 30,
-                        fontFamily: "roboto",
-                        fontWeight: FontWeight.bold),
-                  ))),
+                  padding: const EdgeInsets.only(top: 20, bottom: 10),
+                  child: Text('My Profile',
+                      style: GoogleFonts.openSansCondensed(
+                          fontSize: 30,
+                          fontWeight: FontWeight.w900,
+                          letterSpacing: 2.5)))),
           const SizedBox(height: 50),
           buildUserInfoDisplay(
               _nameController.text, 'Name', EditNameFormPage(reg: widget.reg)),
@@ -99,14 +105,14 @@ class _ProfilePageState extends State<ProfilePage> {
                   const Text(
                     "Email",
                     style: TextStyle(
-                      fontFamily: "roboto",
-                      fontSize: 15,
-                      fontWeight: FontWeight.w500,
-                      color: background,
-                    ),
+                        fontFamily: "roboto",
+                        fontSize: 18,
+                        fontWeight: FontWeight.w600,
+                        color: background,
+                        letterSpacing: 1),
                   ),
                   const SizedBox(
-                    height: 2,
+                    height: 10,
                   ),
                   Container(
                     width: 350,
@@ -119,16 +125,8 @@ class _ProfilePageState extends State<ProfilePage> {
                     ))),
                     child: Row(children: [
                       Expanded(
-                          child: Text(
-                        widget.reg.email.toString(),
-                        textAlign: TextAlign.center,
-                        style: const TextStyle(
-                          fontFamily: "roboto",
-                          fontSize: 17,
-                          fontWeight: FontWeight.w500,
-                          color: btn,
-                        ),
-                      )),
+                          child: Text(widget.reg.email.toString(),
+                              textAlign: TextAlign.center, style: text)),
                       Visibility(
                         visible: true,
                         child: IconButton(
@@ -157,18 +155,15 @@ class _ProfilePageState extends State<ProfilePage> {
               Text(
                 title,
                 style: const TextStyle(
-                  fontFamily: "roboto",
-                  fontSize: 15,
-                  fontWeight: FontWeight.w500,
-                  color: background,
-                ),
-              ),
-              const SizedBox(
-                height: 2,
+                    fontFamily: "roboto",
+                    fontSize: 18,
+                    fontWeight: FontWeight.w600,
+                    color: background,
+                    letterSpacing: 1),
               ),
               Container(
                   width: 350,
-                  height: 40,
+                  height: 50,
                   decoration: const BoxDecoration(
                       border: Border(
                           bottom: BorderSide(
@@ -184,8 +179,7 @@ class _ProfilePageState extends State<ProfilePage> {
                             child: Text(
                               getValue,
                               textAlign: TextAlign.center,
-                              style: const TextStyle(
-                                  fontSize: 16, height: 1.4, color: btn),
+                              style: text,
                             ))),
                     IconButton(
                       color: btn,

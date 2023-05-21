@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 import '../../constant.dart';
 import '../../fix.dart';
@@ -33,6 +34,13 @@ class _StartPageState extends State<StartPage> {
 
   @override
   Widget build(BuildContext context) {
+    var text = GoogleFonts.openSansCondensed(
+        color: neutral, // Set the label text color
+        fontSize: 17.0, // Set the label text font size
+        fontWeight: FontWeight
+            .w600, // Set the label text font weight // Set the label text font style
+        letterSpacing: 2);
+
     screenHeight = MediaQuery.of(context).size.height;
     screenWidth = MediaQuery.of(context).size.width;
     if (screenWidth >= 800) {
@@ -52,9 +60,9 @@ class _StartPageState extends State<StartPage> {
                 alignment: Alignment.topLeft,
                 height: 100,
                 padding: const EdgeInsets.only(left: 10, top: 10.0),
-                child: const Text(
+                child: Text(
                   'Dyslexic Evaluation Questions for Strengths and Weaknesses',
-                  style: TextStyle(fontSize: 17),
+                  style: text,
                 ),
               ),
             )
@@ -79,21 +87,22 @@ class _StartPageState extends State<StartPage> {
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         const SizedBox(height: 40),
-                        const Text(
-                          "Before we start, please enter the evaluatee's information.",
-                          textAlign: TextAlign.justify,
-                          style: TextStyle(
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.blueAccent),
-                        ),
+                        Text(
+                            "Before we start, please enter the child's information.",
+                            textAlign: TextAlign.justify,
+                            style: GoogleFonts.openSansCondensed(
+                                color: background, // Set the label text color
+                                fontSize: 25.0, // Set the label text font size
+                                fontWeight: FontWeight
+                                    .w900, // Set the label text font weight // Set the label text font style
+                                letterSpacing: 2)),
                         const SizedBox(
                           height: 60,
                         ),
                         TextFormField(
                           controller: _nameController,
                           decoration: InputDecoration(
-                              labelText: 'Enter the Evaluatee Name',
+                              labelText: 'Child Name',
                               border: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(10.0))),
                           validator: (value) {
@@ -118,7 +127,7 @@ class _StartPageState extends State<StartPage> {
                         TextFormField(
                           controller: _ageController,
                           decoration: InputDecoration(
-                              labelText: 'Enter the Evaluatee Age',
+                              labelText: 'Child Age',
                               border: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(10.0))),
                           validator: (value) {
@@ -143,9 +152,14 @@ class _StartPageState extends State<StartPage> {
                           height: 50,
                           child: ElevatedButton(
                             // ignore: sort_child_properties_last
-                            child: const Text("Start",
-                                style: TextStyle(
-                                    fontSize: 30, fontWeight: FontWeight.bold)),
+                            child: Text("Start",
+                                style: GoogleFonts.openSansCondensed(
+                                    color: neutral, // Set the label text color
+                                    fontSize:
+                                        30.0, // Set the label text font size
+                                    fontWeight: FontWeight
+                                        .w600, // Set the label text font weight // Set the label text font style
+                                    letterSpacing: 2)),
                             style: ButtonStyle(
                                 shape: MaterialStateProperty.all<
                                         RoundedRectangleBorder>(
@@ -197,7 +211,7 @@ class _StartPageState extends State<StartPage> {
                           },
                         ),
                         const SizedBox(
-                          height: 5,
+                          height: 10,
                         ),
                         GestureDetector(
                           child: const Text("Not Yet Registered? Click Me!",

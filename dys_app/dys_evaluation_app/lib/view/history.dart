@@ -53,6 +53,13 @@ class _HistoryPageState extends State<HistoryPage> {
 
   @override
   Widget build(BuildContext context) {
+    var text = GoogleFonts.openSansCondensed(
+      color: background, // Set the label text color
+      fontSize: 25.0, // Set the label text font size
+      fontWeight: FontWeight
+          .bold, // Set the label text font weight // Set the label text font style
+    );
+
     screenHeight = MediaQuery.of(context).size.height;
     screenWidth = MediaQuery.of(context).size.width;
     if (screenWidth >= 800) {
@@ -89,8 +96,8 @@ class _HistoryPageState extends State<HistoryPage> {
                         'History Page',
                         style: GoogleFonts.openSansCondensed(
                             fontSize: 30,
-                            fontWeight: FontWeight.bold,
-                            letterSpacing: 3.2),
+                            fontWeight: FontWeight.w900,
+                            letterSpacing: 2.5),
                       ),
                     ],
                   ),
@@ -109,13 +116,8 @@ class _HistoryPageState extends State<HistoryPage> {
                     child: Padding(
                         padding: const EdgeInsets.only(left: 30),
                         child: Registered
-                            ? Text(titlecenter,
-                                style: const TextStyle(
-                                    fontSize: 18, fontWeight: FontWeight.bold))
-                            : Text(center,
-                                style: const TextStyle(
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.bold))),
+                            ? Text(titlecenter, style: text)
+                            : Text(center, style: text)),
                   ),
                 ],
               )
@@ -126,10 +128,8 @@ class _HistoryPageState extends State<HistoryPage> {
                     padding: const EdgeInsets.all(8.0),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
-                      children: const [
-                        Text("Evaluatee List",
-                            style: TextStyle(
-                                fontSize: 20, fontWeight: FontWeight.bold)),
+                      children: [
+                        Text("Evaluatee List", style: text),
                       ],
                     ),
                   ),

@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:dys_evaluation_app/fix.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
@@ -16,12 +15,13 @@ class ForgotPasswordPage extends StatefulWidget {
 }
 
 class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
-  bool _passwordVisible = true;
   late double screenHeight,
       screenWidth,
       resWidth; //used to get the device width and height and set up a responsive widget.
   final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
+  bool _passwordVisible = true;
 
   @override
   Widget build(BuildContext context) {
@@ -33,12 +33,6 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
       resWidth = screenWidth * 0.75;
       //rowcount = 3;
     }
-    const colorizeColors = [
-      Colors.purple,
-      Colors.blue,
-      Colors.yellow,
-      Colors.red,
-    ];
 
     const text = TextStyle(
       color: background, // Set the label text color
@@ -46,12 +40,6 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
       fontWeight: FontWeight
           .bold, // Set the label text font weight // Set the label text font style
     );
-
-    var colorizeTextStyle = GoogleFonts.openSansCondensed(
-        color: background,
-        fontSize: 40,
-        fontWeight: FontWeight.w900,
-        letterSpacing: 3);
 
     return Scaffold(
         backgroundColor: neutral,
@@ -109,7 +97,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                             textInputAction: TextInputAction.next,
                             controller: _emailController,
                             decoration: InputDecoration(
-                                contentPadding: const EdgeInsets.all(10.0),
+                                contentPadding: const EdgeInsets.all(15.0),
                                 labelText: 'Enter your Email',
                                 labelStyle: text,
                                 prefixIcon: const Icon(Icons.title),
@@ -128,6 +116,41 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                             },
                           ),
                         ),
+                        const SizedBox(height: 5),
+                        Container(
+                          padding: const EdgeInsets.all(10.0),
+                          child: TextFormField(
+                            controller: _passwordController,
+                            obscureText: _passwordVisible,
+                            decoration: InputDecoration(
+                                suffixIcon: IconButton(
+                                  icon: Icon(
+                                    _passwordVisible
+                                        ? Icons.visibility_off
+                                        : Icons.visibility,
+                                  ),
+                                  onPressed: () {
+                                    setState(() {
+                                      _passwordVisible = !_passwordVisible;
+                                    });
+                                  },
+                                ),
+                                contentPadding: const EdgeInsets.all(15.0),
+                                labelText: 'Enter a new Password',
+                                labelStyle: text,
+                                border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(30.0))),
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return 'Please enter your password';
+                              }
+                              if (value.length < 6) {
+                                return "Password must be at least 6 characters";
+                              }
+                              return null;
+                            },
+                          ),
+                        ),
                         const SizedBox(height: 20),
                         SizedBox(
                           width: 200,
@@ -139,7 +162,10 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                                     RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(15.0),
                             ))),
-                            onPressed: _resetPasswordDialog,
+                            onPressed: () => {
+                              //do something
+                              _checkUser(),
+                            },
                             child: const Text("Reset Password",
                                 style: TextStyle(
                                     color: Colors.white,
@@ -151,6 +177,36 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                 ),
               )),
         ));
+  }
+
+  void _updatePassword(String password) {
+    String newpassword = password;
+    http.post(
+        Uri.parse("${CONSTANTS.server}/dys_server/php/updatePassViaEmail.php"),
+        body: {
+          "password": newpassword,
+          "email": _emailController.text,
+        }).then((response) {
+      print(response.body);
+      var data = jsonDecode(response.body);
+      if (response.statusCode == 200 && data['status'] == 'success') {
+        Fluttertoast.showToast(
+            msg: "Update success",
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.BOTTOM,
+            timeInSecForIosWeb: 1,
+            fontSize: 16.0);
+        print("Update success");
+      } else {
+        Fluttertoast.showToast(
+            msg: "Update Failed",
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.BOTTOM,
+            timeInSecForIosWeb: 1,
+            fontSize: 16.0);
+        print("Update Failed");
+      }
+    });
   }
 
   void _resetPasswordDialog() {
@@ -175,7 +231,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                 ),
                 onPressed: () {
                   Navigator.of(context).pop();
-                  _checkUser();
+                  _updatePassword(_passwordController.text);
                 },
               ),
               TextButton(
@@ -198,7 +254,8 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
     FocusScope.of(context).requestFocus(FocusNode());
     String _email = _emailController.text;
 
-    http.post(Uri.parse("${CONSTANTS.server}/dys_server/php/registration.php"),
+    http.post(
+        Uri.parse("${CONSTANTS.server}/dys_server/php/checkRegistered.php"),
         body: {
           "email": _email,
         }).then((response) {
@@ -211,6 +268,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
             gravity: ToastGravity.BOTTOM,
             timeInSecForIosWeb: 1,
             fontSize: 16.0);
+        _resetPasswordDialog();
         print("send message success");
       } else {
         Fluttertoast.showToast(

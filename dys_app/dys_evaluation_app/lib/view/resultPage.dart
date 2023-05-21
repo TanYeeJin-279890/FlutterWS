@@ -1,11 +1,13 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:math';
 
 import 'package:dys_evaluation_app/fix.dart';
 import 'package:dys_evaluation_app/view/mainscrn/mainscrn.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_radar_chart/flutter_radar_chart.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
 
 import '../constant.dart';
@@ -32,6 +34,10 @@ class _ResultPageState extends State<ResultPage> {
   double numberOfFeatures = 8;
   late List<int> data;
   bool isRegistered = false;
+  double _width = 50;
+  double _height = 50;
+  Color _color = Colors.green;
+  BorderRadiusGeometry _borderRadius = BorderRadius.circular(8);
 
   @override
   void initState() {
@@ -98,7 +104,7 @@ class _ResultPageState extends State<ResultPage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Container(
-              height: 1000,
+              height: 2000,
               width: 500,
               color: darkMode ? Colors.black : neutral,
               child: Column(
@@ -195,7 +201,7 @@ class _ResultPageState extends State<ResultPage> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
-                          "Evaluatee's Name: ${widget.name}",
+                          "Name: ${widget.name}",
                           style: const TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.bold,
@@ -212,7 +218,7 @@ class _ResultPageState extends State<ResultPage> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
-                          "Evaluatee's Age: ${widget.age}",
+                          "Age: ${widget.age}",
                           style: const TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.bold,
@@ -363,84 +369,148 @@ class _ResultPageState extends State<ResultPage> {
                     ),
                   ),
 
-                  //Button
-                  Padding(
-                      padding: const EdgeInsets.only(top: 20, bottom: 20.0),
-                      child: isRegistered
-                          ? Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceAround,
-                              children: <Widget>[
-                                FloatingActionButton.extended(
-                                  onPressed: () => {
-                                    _saveTotalMarks(widget.name, data),
-                                    Timer(
-                                        const Duration(seconds: 5),
-                                        () => Navigator.pushReplacement(
-                                            context,
-                                            MaterialPageRoute(
-                                                builder: (content) =>
-                                                    MainScreen(
-                                                      reg: widget.reg,
-                                                    ))))
-                                  },
-                                  icon: const Icon(
-                                    // <-- Icon
-                                    Icons.save,
-                                    size: 24.0,
-                                  ),
-                                  label: const Text("Save"),
-                                  backgroundColor: btn,
-                                  heroTag: 1,
-                                ),
-                                FloatingActionButton.extended(
-                                  onPressed: () => {
-                                    Navigator.pushReplacement(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (content) => MainScreen(
-                                                  reg: widget.reg,
-                                                )))
-                                  },
-                                  icon: const Icon(
-                                    // <-- Icon
-                                    Icons.navigate_before_rounded,
-                                    size: 24.0,
-                                  ),
-                                  label: const Text("Back"),
-                                  backgroundColor: btn,
-                                  heroTag: 2,
-                                ),
-                              ],
-                            )
-                          : Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceAround,
-                              children: <Widget>[
-                                FloatingActionButton.extended(
-                                  onPressed: () => {
-                                    Navigator.of(context).pushReplacement(
-                                        MaterialPageRoute(
-                                            builder: (BuildContext context) =>
-                                                MainScreen(
-                                                  reg: widget.reg,
-                                                )))
-                                  },
-                                  icon: const Icon(
-                                    // <-- Icon
-                                    Icons.restart_alt,
-                                    size: 24.0,
-                                  ),
-                                  label: const Text("Re-Test"),
-                                  backgroundColor: btn,
-                                ),
-                              ],
-                            )),
+                  //Summary
+                  SizedBox(
+                    child: AnimatedContainer(
+                      // Use the properties stored in the State class.
+                      width: _width,
+                      height: _height,
+                      decoration: BoxDecoration(
+                        color: _color,
+                        borderRadius: _borderRadius,
+                      ),
+                      // Define how long the animation should take.
+                      duration: const Duration(seconds: 1),
+                      // Provide an optional curve to make the animation feel smoother.
+                      curve: Curves.fastOutSlowIn,
+                    ),
+                  ),
+
+                  //Summary btn
+                  SizedBox(
+                    child: ElevatedButton(
+                      // ignore: sort_child_properties_last
+                      child: Text("Click Me To Summarize",
+                          style: GoogleFonts.openSans(
+                              color: neutral, // Set the label text color
+                              fontSize: 25.0, // Set the label text font size
+                              fontWeight: FontWeight
+                                  .w700, // Set the label text font weight // Set the label text font style
+                              letterSpacing: 1)),
+                      style: ButtonStyle(
+                          shape:
+                              MaterialStateProperty.all<RoundedRectangleBorder>(
+                                  RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(30.0),
+                                      side: const BorderSide(color: btn)))),
+                      onPressed: () {
+                        // Use setState to rebuild the widget with new values.
+                        setState(() {
+                          // Create a random number generator.
+                          final random = Random();
+
+                          // Generate a random width and height.
+                          _width = random.nextInt(300).toDouble();
+                          _height = random.nextInt(300).toDouble();
+
+                          // Generate a random color.
+                          _color = Color.fromRGBO(
+                            random.nextInt(256),
+                            random.nextInt(256),
+                            random.nextInt(256),
+                            1,
+                          );
+
+                          // Generate a random border radius.
+                          _borderRadius = BorderRadius.circular(
+                              random.nextInt(100).toDouble());
+                        });
+                      },
+                    ),
+                  ),
                 ],
               ),
             ),
+
+            //Button
+            Padding(
+                padding: const EdgeInsets.only(top: 40, bottom: 20.0),
+                child: isRegistered
+                    ? Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: <Widget>[
+                          FloatingActionButton.extended(
+                            onPressed: () => {
+                              _saveTotalMarks(widget.name, data),
+                              Timer(
+                                  const Duration(seconds: 5),
+                                  () => Navigator.pushReplacement(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (content) => MainScreen(
+                                                reg: widget.reg,
+                                              ))))
+                            },
+                            icon: const Icon(
+                              // <-- Icon
+                              Icons.save,
+                              size: 24.0,
+                            ),
+                            label: const Text("Save"),
+                            backgroundColor: btn,
+                            heroTag: 1,
+                          ),
+                          FloatingActionButton.extended(
+                            onPressed: () => {
+                              Navigator.pushReplacement(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (content) => MainScreen(
+                                            reg: widget.reg,
+                                          )))
+                            },
+                            icon: const Icon(
+                              // <-- Icon
+                              Icons.navigate_before_rounded,
+                              size: 24.0,
+                            ),
+                            label: const Text("Back"),
+                            backgroundColor: btn,
+                            heroTag: 2,
+                          ),
+                        ],
+                      )
+                    : Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: <Widget>[
+                          FloatingActionButton.extended(
+                            onPressed: () => {
+                              Navigator.of(context).pushReplacement(
+                                  MaterialPageRoute(
+                                      builder: (BuildContext context) =>
+                                          MainScreen(
+                                            reg: widget.reg,
+                                          )))
+                            },
+                            icon: const Icon(
+                              // <-- Icon
+                              Icons.restart_alt,
+                              size: 24.0,
+                            ),
+                            label: const Text("Re-Test"),
+                            backgroundColor: btn,
+                          ),
+                        ],
+                      )),
           ],
         ),
       ),
     );
+  }
+
+  void gatMax() {
+    var maxMarks = widget.ttlmarks;
+    print(maxMarks);
   }
 
   void _saveTotalMarks(String name, List<int> data) {
@@ -463,7 +533,7 @@ class _ResultPageState extends State<ResultPage> {
           "Social_marks": social,
           "Narrative_marks": narrative,
           "Spatial_marks": spatial,
-          "Kinesthetis_marks": kinesthetic,
+          "Kinesthetic_marks": kinesthetic,
           "Visual_marks": visual,
           "MathSci_marks": mathsci,
           "Musical_marks": musical,

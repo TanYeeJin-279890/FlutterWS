@@ -251,7 +251,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                 RoundedRectangleBorder>(RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(15.0),
                         ))),
-                        onPressed: _regDialog,
+                        onPressed: _checkUser,
                         child: const Text("Register",
                             style: TextStyle(
                                 color: Colors.white,
@@ -336,7 +336,10 @@ class _RegisterPageState extends State<RegisterPage> {
           "password": _password,
         }).then((response) {
       print(response.body);
+
       var data = jsonDecode(response.body);
+      print("data");
+      print(data);
       if (response.statusCode == 200 && data['status'] == 'success') {
         Fluttertoast.showToast(
             msg: "Registration Success",
@@ -353,6 +356,32 @@ class _RegisterPageState extends State<RegisterPage> {
             timeInSecForIosWeb: 1,
             fontSize: 16.0);
         print("Registration Failed");
+      }
+    });
+  }
+
+  void _checkUser() {
+    FocusScope.of(context).requestFocus(FocusNode());
+    String _email = _emailController.text;
+
+    http.post(
+        Uri.parse("${CONSTANTS.server}/dys_server/php/checkRegistered.php"),
+        body: {
+          "email": _email,
+        }).then((response) {
+      print(response.body);
+      var data = jsonDecode(response.body);
+      if (response.statusCode == 200 && data['status'] == 'success') {
+        Fluttertoast.showToast(
+            msg: "You have been registered successfully",
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.BOTTOM,
+            timeInSecForIosWeb: 1,
+            fontSize: 16.0);
+        print("send message success");
+      } else {
+        _regDialog();
+        print("non registered user");
       }
     });
   }
